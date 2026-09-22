@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business English ESL Course - Unit 1</title>
+    
+    <!-- External Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0A1A56;
+            --secondary-color: #4D99AD;
+            --white-color: #FFFFFF;
+            --text-color: #333;
+            --light-gray: #f8fafc;
+            --correct-color: #10b981;
+            --incorrect-color: #ef4444;
+        }
+        html { scroll-behavior: smooth; }
+        * { font-family: 'Lato', sans-serif; }
+        body { background-color: var(--light-gray); }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            position: relative; overflow: hidden; background-attachment: fixed;
+        }
+        .hero-section::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://archive.org/download/pexels-fauxels-3184416/pexels-fauxels-3184416.jpg') center/cover;
+            background-attachment: fixed; opacity: 0.15; z-index: 1;
+        }
+        .hero-content { position: relative; z-index: 2; }
+        
+        .section-card {
+            background: white; border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+        }
+
+        .menu-tile {
+            background: white; border-radius: 12px;
+            text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden; padding: 15px 10px;
+        }
+        .menu-tile:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+        .menu-icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 15px; transition: color 0.3s; }
+        .menu-tile:hover .menu-icon { color: var(--secondary-color); }
+        .menu-tile h3 { color: var(--primary-color); padding: 10px; margin: 0; font-size: 1.1em; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white; border: none; border-radius: 8px; padding: 10px 20px;
+            font-weight: 600; transition: all 0.3s ease; cursor: pointer;
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); }
+        
+        .btn-secondary {
+            background: white; color: var(--primary-color); border: 2px solid var(--primary-color);
+            border-radius: 8px; padding: 8px 18px; font-weight: 600;
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .btn-secondary:hover { background: var(--primary-color); color: white; }
+        
+        .quiz-toggle {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;
+        }
+        .quiz-toggle:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); }
+        .quiz-toggle.active { border-radius: 8px 8px 0 0; }
+        
+        .quiz-content {
+            background: white; border-radius: 0 0 8px 8px; border: 1px solid #e2e8f0; border-top: none;
+            max-height: 0; opacity: 0; overflow: hidden; transition: all 0.5s ease;
+        }
+        .quiz-content.active { max-height: 2000px; opacity: 1; padding: 1.5rem; }
+
+        .feedback {
+            font-weight: 600; padding: 8px 12px; border-radius: 6px; margin-top: 8px;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .feedback.correct {
+            color: var(--correct-color);
+        }
+        .feedback.incorrect {
+            color: var(--incorrect-color);
+        }
+        
+        .email-sample { background: #f8fafc; border-left: 4px solid var(--secondary-color); border-radius: 8px; }
+        .objectives-box { background: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 8px; }
+        
+        .table-modern { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .table-modern th { background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); color: var(--primary-color); font-weight: 700; }
+        .table-modern tbody tr:nth-child(even) { background: #f8fafc; }
+        
+        .input-modern { border: 2px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; transition: border-color 0.3s ease; }
+        .input-modern:focus { outline: none; border-color: var(--secondary-color); }
+
+        #floating-progress-panel { position: fixed; bottom: 20px; left: 20px; z-index: 1000; display: none; background-color: var(--primary-color); color: var(--white-color); padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); width: 220px; }
+        .page-nav-buttons { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none; flex-direction: column; gap: 10px; }
+        .page-nav-buttons button { width: 50px; height: 50px; border-radius: 50%; background-color: var(--primary-color); color: var(--white-color); border: none; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; }
+        .page-nav-buttons button:hover { background-color: var(--secondary-color); transform: scale(1.1); }
+        
+        #floating-sound-bank {
+            position: fixed; bottom: 80px; right: 20px; z-index: 1000;
+            display: none;
+            background-color: transparent;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+            border-radius: 8px;
+        }
+        #floating-sound-bank iframe { border-radius: 8px; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <div class="hero-section text-white py-16">
+        <div class="hero-content text-center px-4">
+            <img src="https://ucn.edu.co/wp-content/uploads/2025/03/ucn-logosimbolo.svg" alt="UCN Logo" class="w-56 mx-auto mb-6 filter brightness-0 invert" style="width: 225px;">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Business English: The Basics</h1>
+            <p class="text-xl mb-6 opacity-90">Unit 1: Introductions and Greetings in Business Emails</p>
+            <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm mt-6 opacity-90">
+                <span class="flex items-center"><i class="fas fa-clock mr-2"></i>Duration: ~5.5 hours</span>
+                <span class="flex items-center"><i class="fas fa-layer-group mr-2"></i>Beginner Level</span>
+                <span class="flex items-center"><i class="fas fa-bookmark mr-2"></i>Unit 1 of 6</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container max-w-6xl mx-auto px-4 py-8">
+        <main>
+            <div id="main-menu-content">
+                <div class="objectives-box p-6 mb-8 animate-fade-in-up">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><i class="fas fa-bullseye mr-3 text-blue-600"></i>Learning Objectives</h2>
+                    <ul class="space-y-2">
+                        <li class="flex items-start space-x-3"><i class="fas fa-check-circle text-blue-600 mt-1"></i><span>Use common greetings and sign-offs in business emails</span></li>
+                        <li class="flex items-start space-x-3"><i class="fas fa-check-circle text-blue-600 mt-1"></i><span>Identify the basic parts of a business email</span></li>
+                        <li class="flex items-start space-x-3"><i class="fas fa-check-circle text-blue-600 mt-1"></i><span>Write a simple 3-sentence introduction email</span></li>
+                    </ul>
+                </div>
+                <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in-up">
+                    <div class="menu-tile p-6" onclick="showSection('vocab-section')">
+                        <i class="fas fa-spell-check menu-icon text-4xl mb-4"></i>
+                        <h3 class="font-bold text-lg">1. Vocabulary</h3>
+                    </div>
+                    <div class="menu-tile p-6" onclick="showSection('reading-section')">
+                        <i class="fas fa-book-open-reader menu-icon text-4xl mb-4"></i>
+                        <h3 class="font-bold text-lg">2. Reading</h3>
+                    </div>
+                    <div class="menu-tile p-6" onclick="showSection('grammar-section')">
+                        <i class="fas fa-pen-ruler menu-icon text-4xl mb-4"></i>
+                        <h3 class="font-bold text-lg">3. Grammar</h3>
+                    </div>
+                    <div class="menu-tile p-6" onclick="showSection('practical-section')">
+                        <i class="fas fa-keyboard menu-icon text-4xl mb-4"></i>
+                        <h3 class="font-bold text-lg">4. Practical Task</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vocabulary Section -->
+            <section id="vocab-section" class="content-section section-card p-6 md:p-8 hidden">
+                <button class="btn-primary mb-6" onclick="showMenu()"><i class="fas fa-arrow-left mr-2"></i>Back to Menu</button>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">1. Vocabulary Presentation</h2>
+                <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Business people meeting" class="w-full h-64 object-cover rounded-lg shadow-md mb-8">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">Greetings & Sign-offs</h3>
+                        <p><strong>Greetings:</strong></p><ul><li>Dear Mr. Smith (for men)</li><li>Dear Ms. Jones (for women)</li><li>Dear Sir/Madam</li><li>Hello (informal)</li></ul>
+                        <p class="mt-4"><strong>Sign-offs:</strong></p><ul><li>Best regards</li><li>Sincerely</li><li>Thank you</li><li>Kind regards</li></ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-2">Email Parts & Introductions</h3>
+                        <p><strong>Email Parts:</strong></p><ul><li>Subject line</li><li>Body</li><li>Greeting</li><li>Sign-off</li><li>Signature</li></ul>
+                        <p class="mt-4"><strong>Introduction Words:</strong></p><ul><li>My name is...</li><li>I am...</li><li>I work at/for...</li><li>Nice to meet you</li><li>Please</li></ul>
+                    </div>
+                </div>
+                <div class="mt-6"><button onclick="toggleSoundBank()" class="btn-primary"><i class="fas fa-volume-high mr-2"></i>Toggle Audio Bank</button></div>
+                <div class="quiz-toggle mt-6" onclick="toggleQuiz(this, 'vocab-quiz-content')"><h3 class="text-xl font-bold"><i class="fas fa-brain mr-3"></i>Vocabulary Exercises</h3><i class="fas fa-chevron-down"></i></div>
+                <div class="quiz-content" id="vocab-quiz-content"><div id="quiz-vocab" class="space-y-4"></div><div class="mt-6"><button onclick="checkQuiz('vocab')" class="btn-primary">Check Answers</button><button onclick="generateQuiz('vocab')" class="btn-secondary ml-2">Try Again</button></div></div>
+            </section>
+            
+            <!-- Reading Section -->
+            <section id="reading-section" class="content-section section-card p-6 md:p-8 hidden">
+                <button class="btn-primary mb-6" onclick="showMenu()"><i class="fas fa-arrow-left mr-2"></i>Back to Menu</button>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">2. Reading</h2>
+                <img src="https://images.pexels.com/photos/3760263/pexels-photo-3760263.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Man reading an email on a laptop" class="w-full h-64 object-cover rounded-lg shadow-md mb-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Sample Business Email</h3>
+                <iframe src="https://archive.org/embed/bea-1-u-1-reading" width="100%" height="60" frameborder="0" class="rounded-lg border mb-4"></iframe>
+                <div class="email-sample p-6"><div class="mb-4"><strong class="text-blue-600">Subject:</strong> Introduction - New Team Member</div><div class="space-y-4 text-gray-800"><p>Dear Ms. Rodriguez,</p><p>My name is John Miller and I am the new Marketing Assistant at ABC Company. I started work on Monday and I am very excited to join the team. Please let me know if you need any information from me.</p><p>Best regards,</p><div class="mt-4 border-t pt-4 text-sm"><p><strong>John Miller</strong><br>Marketing Assistant<br>ABC Company<br>john.miller@abccompany.com<br>Phone: (555) 123-4567</p></div></div></div>
+                <div class="quiz-toggle mt-6" onclick="toggleQuiz(this, 'reading-quiz-content')"><h3 class="text-xl font-bold"><i class="fas fa-question-circle mr-3"></i>Reading Comprehension</h3><i class="fas fa-chevron-down"></i></div>
+                <div class="quiz-content" id="reading-quiz-content"><div id="quiz-reading" class="space-y-4"></div><div class="mt-6"><button onclick="checkQuiz('reading')" class="btn-primary">Check Answers</button><button onclick="generateQuiz('reading')" class="btn-secondary ml-2">Try Again</button></div></div>
+            </section>
+
+            <!-- Grammar Section -->
+            <section id="grammar-section" class="content-section section-card p-6 md:p-8 hidden">
+                 <button class="btn-primary mb-6" onclick="showMenu()"><i class="fas fa-arrow-left mr-2"></i>Back to Menu</button>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">3. Grammar Presentation</h2>
+                <img src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Person writing on a whiteboard" class="w-full h-64 object-cover rounded-lg shadow-md mb-8">
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Simple Present: Verb "To Be"</h3>
+                        <div class="grid lg:grid-cols-3 gap-6">
+                            <div><h4 class="text-lg font-semibold text-center bg-green-100 py-2 rounded">Affirmative</h4><div class="table-modern mt-3"><table><thead><tr><th class="p-3">Subject</th><th class="p-3">Verb</th><th>Example</th></tr></thead><tbody><tr><td class="p-3">I</td><td class="p-3 font-semibold text-green-600">am</td><td class="p-3">I am a student.</td></tr><tr><td class="p-3">You/We/They</td><td class="p-3 font-semibold text-green-600">are</td><td class="p-3">They are doctors.</td></tr><tr><td class="p-3">He/She/It</td><td class="p-3 font-semibold text-green-600">is</td><td class="p-3">She is a teacher.</td></tr></tbody></table></div></div>
+                            <div><h4 class="text-lg font-semibold text-center bg-red-100 py-2 rounded">Negative</h4><div class="table-modern mt-3"><table><thead><tr><th class="p-3">Subject</th><th class="p-3">Verb + Not</th><th>Example</th></tr></thead><tbody><tr><td class="p-3">I</td><td class="p-3 font-semibold text-red-600">am not</td><td class="p-3">I'm not tired.</td></tr><tr><td class="p-3">You/We/They</td><td class="p-3 font-semibold text-red-600">are not (aren't)</td><td class="p-3">You aren't late.</td></tr><tr><td class="p-3">He/She/It</td><td class="p-3 font-semibold text-red-600">is not (isn't)</td><td class="p-3">He isn't here.</td></tr></tbody></table></div></div>
+                            <div><h4 class="text-lg font-semibold text-center bg-blue-100 py-2 rounded">Questions</h4><div class="table-modern mt-3"><table><thead><tr><th class="p-3">Verb</th><th class="p-3">Subject</th><th>Example</th></tr></thead><tbody><tr><td class="p-3 font-semibold text-blue-600">Am</td><td class="p-3">I</td><td class="p-3">Am I right?</td></tr><tr><td class="p-3 font-semibold text-blue-600">Are</td><td class="p-3">you/we/they</td><td class="p-3">Are you busy?</td></tr><tr><td class="p-3 font-semibold text-blue-600">Is</td><td class="p-3">he/she/it</td><td class="p-3">Is he your brother?</td></tr></tbody></table></div></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Simple Present: Other Verbs</h3>
+                        <div class="grid lg:grid-cols-3 gap-6">
+                            <div><h4 class="text-lg font-semibold text-center bg-green-100 py-2 rounded">Affirmative</h4><div class="table-modern mt-3"><table><thead><tr><th class="p-3">Subject</th><th class="p-3">Verb Form</th><th>Example</th></tr></thead><tbody><tr><td class="p-3">I/You/We/They</td><td class="p-3 font-semibold text-green-600">work</td><td class="p-3">I work at a bank.</td></tr><tr><td class="p-3">He/She/It</td><td class="p-3 font-semibold text-green-600">works</td><td class="p-3">She works in marketing.</td></tr></tbody></table></div></div>
+                            <div><h4 class="text-lg font-semibold text-center bg-red-100 py-2 rounded">Negative</h4><div class="table-modern mt-3"><table><thead><tr><th class="p-3">Subject</th><th class="p-3">Helping Verb</th><th>Example</th></tr></thead><tbody><tr><td class="p-3">I/You/We/They</td><td class="p-3 font-semibold text-red-600">don't work</td><td class="p-3">They don't work on weekends.</td></tr><tr><td class="p-3">He/She/It</td><td class="p-3 font-semibold text-red-600">doesn't work</td><td class="p-3">He doesn't work here.</td></tr></tbody></table></div></div>
+                            <div><h4 class="text-lg font-semibold text-center bg-blue-100 py-2 rounded">Questions</h4><div class="table-modern mt-3"><table><thead><tr><th class="p-3">Helping Verb</th><th class="p-3">Subject + Verb</th><th>Example</th></tr></thead><tbody><tr><td class="p-3 font-semibold text-blue-600">Do</td><td class="p-3">you/they work?</td><td class="p-3">Do you work here?</td></tr><tr><td class="p-3 font-semibold text-blue-600">Does</td><td class="p-3">he/she work?</td><td class="p-3">Does she work with you?</td></tr></tbody></table></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="quiz-toggle mt-8" onclick="toggleQuiz(this, 'grammar-quiz-content')"><h3 class="text-xl font-bold"><i class="fas fa-edit mr-3"></i>Grammar Exercises</h3><i class="fas fa-chevron-down"></i></div>
+                <div class="quiz-content" id="grammar-quiz-content"><div id="quiz-grammar" class="space-y-4"></div><div class="mt-6"><button onclick="checkQuiz('grammar')" class="btn-primary">Check Answers</button><button onclick="generateQuiz('grammar')" class="btn-secondary ml-2">Try Again</button></div></div>
+            </section>
+            
+            <section id="practical-section" class="content-section section-card p-6 md:p-8 hidden">
+                <button class="btn-primary mb-6" onclick="showMenu()"><i class="fas fa-arrow-left mr-2"></i>Back to Menu</button>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">4. Practical Task: Writing</h2>
+                <img src="https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Person writing an email on a laptop" class="w-full h-64 object-cover rounded-lg shadow-md mb-8">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Left Column: Writing Area -->
+                    <div class="bg-gray-50 p-6 rounded-lg border">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Email Template</h3>
+                        <p class="text-sm text-gray-600 mb-4"><strong>Situation:</strong> You are starting a new job at TechCorp as a Sales Assistant. Write a 3-sentence email to introduce yourself to your new colleague, Anna Peterson.</p>
+                        <div class="space-y-4">
+                            <div><label class="block font-semibold text-gray-700 mb-2">Subject:</label><input type="text" placeholder="e.g., Introduction - [Your Name]" class="input-modern w-full"></div>
+                            <div><label class="block font-semibold text-gray-700 mb-2">Email Body:</label><textarea rows="8" class="input-modern w-full" placeholder="Sentence 1 (Your name and job):
+Sentence 2 (Something about starting work):
+Sentence 3 (Polite request or offer):"></textarea></div>
+                        </div>
+                    </div>
+                    <!-- Right Column: Checklist -->
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Self-Check Questions</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="h-5 w-5 mr-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><span>Did you use a proper greeting?</span></label>
+                            <label class="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="h-5 w-5 mr-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><span>Did you include your name and job?</span></label>
+                            <label class="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="h-5 w-5 mr-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><span>Did you use a polite sign-off?</span></label>
+                            <label class="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="h-5 w-5 mr-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><span>Is your email exactly 3 sentences?</span></label>
+                            <label class="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-100 cursor-pointer"><input type="checkbox" class="h-5 w-5 mr-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><span>Did you include all contact info?</span></label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- FLOATING UI ELEMENTS -->
+    <div id="floating-progress-panel"><div class="progress-label" id="progress-label">Section Progress</div><div class="progress-bar-container"><div class="progress-bar-fill" id="progress-bar"></div></div></div>
+    <div id="floating-sound-bank"><iframe src="https://archive.org/embed/iwork_202506" width="320" height="60" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe></div>
+    <div class="page-nav-buttons" id="page-nav"><button onclick="goToTop()" title="Go to Top"><i class="fas fa-arrow-up"></i></button><button onclick="goToBottom()" title="Go to Bottom"><i class="fas fa-arrow-down"></i></button></div>
+
+    <script>
+        const quizPool = { vocab: [ { type: 'match', q: 'Match: Dear Mr. Smith', a: 'How you say hello to a man', o: ["How you say goodbye", "The main text", "How you say hello to a man"]}, { type: 'match', q: 'Match: Subject line', a: 'The title of your email', o: ["The title of your email", "Your name", "The main text"]}, { type: 'match', q: 'Match: Body', a: 'The main text of your email', o: ["How you say goodbye", "The title", "The main text of your email"]}, { type: 'match', q: 'Match: Sign-off', a: 'How you say goodbye in an email', o: ["How you say goodbye in an email", "How you say hello", "Your contact info"]}, { type: 'match', q: 'Match: Best regards', a: 'A polite way to end an email', o: ["How you say hello", "A polite way to end an email", "The title"]}, { type: 'fill', q: 'The _______ line tells people what your email is about.', a: 'subject'}, { type: 'fill', q: '"_______ Ms. Brown" is a formal greeting for a woman.', a: 'Dear'}, { type: 'fill', q: '"_______ regards" is a common way to end a business email.', a: 'Best'}, { type: 'fill', q: 'The _______ is the main part of your email with your message.', a: 'body'}, { type: 'fill', q: 'Your _______ includes your name at the end of the email.', a: 'signature'}, { type: 'choice', q: 'Formal or Informal?: Dear Sir/Madam', a: 'F', o: ['F', 'I']}, { type: 'choice', q: 'Formal or Informal?: Hi there', a: 'I', o: ['F', 'I']}, { type: 'choice', q: 'Formal or Informal?: Dear Ms. Wilson', a: 'F', o: ['F', 'I']}, { type: 'choice', q: 'Formal or Informal?: Hey', a: 'I', o: ['F', 'I']}, { type: 'choice', q: 'Formal or Informal?: Dear Mr. Johnson', a: 'F', o: ['F', 'I']} ], reading: [ { type: 'tf', q: 'John Miller is writing to Ms. Rodriguez.', a: 'T'}, { type: 'tf', q: 'John works in the Sales department.', a: 'F'}, { type: 'tf', q: 'John started work on Tuesday.', a: 'F'}, { type: 'tf', q: 'John is excited about his new job.', a: 'T'}, { type: 'tf', q: 'The email ends with "Sincerely".', a: 'F'}, { type: 'choice', q: "What is John's job title?", a: 'Marketing Assistant', o:['Sales Assistant', 'Marketing Assistant', 'Director']}, { type: 'choice', q: 'What company does John work for?', a: 'ABC Company', o:['TechCorp', 'ABC Company', 'Microsoft']}, { type: 'choice', q: 'When did John start work?', a: 'Monday', o:['Monday', 'Tuesday', 'Friday']}, { type: 'choice', q: 'What is the subject line of the email?', a: 'Introduction - New Team Member', o: ['Hello', 'New Job', 'Introduction - New Team Member']}, { type: 'choice', q: 'How does John end his email?', a: 'Best regards,', o: ['Sincerely,', 'Thanks,', 'Best regards,']}, { type: 'choice', q: 'What is the greeting in the email?', a: 'Dear Ms. Rodriguez,', o: ['Hi Ms. Rodriguez,', 'Dear Ms. Rodriguez,', 'Hello,']}, { type: 'choice', q: "What is John's phone number?", a: '(555) 123-4567', o: ['(555) 987-6543', '(555) 123-4567', '(555) 444-5555']} ], grammar: [ { type: 'choice', q: 'My name (is/are) Maria Santos.', a: 'is', o: ['is', 'are']}, { type: 'choice', q: 'I (work/works) at Dell Company.', a: 'work', o: ['work', 'works']}, { type: 'choice', q: 'I (am/is) the new assistant.', a: 'am', o: ['am', 'is']}, { type: 'choice', q: 'This (is/are) my first day.', a: 'is', o: ['is', 'are']}, { type: 'choice', q: 'Please (let/lets) me know if you need help.', a: 'let', o: ['let', 'lets']}, { type: 'order', q: 'Miller / name / John / My / is', a: 'My name is John Miller.'}, { type: 'order', q: 'at / work / I / IBM', a: 'I work at IBM.'}, { type: 'order', q: 'am / I / excited / very', a: 'I am very excited.'}, { type: 'order', q: 'please / know / let / me', a: 'Please let me know.'}, { type: 'order', q: 'new / the / am / I / manager', a: 'I am the new manager.'}, { type: 'fill', q: 'I _____ Lisa Chen.', a: 'am'}, { type: 'fill', q: 'This _____ my email address.', a: 'is'}, { type: 'fill', q: 'We _____ happy to meet you.', a: 'are'}, { type: 'fill', q: 'You _____ the new director.', a: 'are'}, { type: 'fill', q: 'My phone number _____ 555-0123.', a: 'is'}, { type: 'order', q: 'I / work / Google', a: 'I work at Google.' }, { type: 'order', q: 'My name / David / Kim', a: 'My name is David Kim.' }, { type: 'order', q: 'I / excited / join / team', a: 'I am excited to join the team.' }, { type: 'order', q: 'Please / contact / me', a: 'Please contact me.' }, { type: 'order', q: 'This / my / first / email', a: 'This is my first email.' } ] };
+        const mainMenuContent = document.getElementById('main-menu-content');
+        const allSections = document.querySelectorAll('.content-section');
+        const pageNav = document.getElementById('page-nav');
+        const progressPanel = document.getElementById('floating-progress-panel');
+        const soundBankPanel = document.getElementById('floating-sound-bank');
+        let currentSection = null;
+
+        document.addEventListener('DOMContentLoaded', () => { generateQuiz('vocab'); generateQuiz('reading'); generateQuiz('grammar'); });
+        
+        function resetIframes(sectionEl) { if (sectionEl) sectionEl.querySelectorAll('iframe').forEach(iframe => { const src = iframe.src; iframe.src = null; iframe.src = src; }); }
+        
+        function showMenu() {
+            if (currentSection) resetIframes(currentSection);
+            currentSection = null;
+            mainMenuContent.style.display = 'block';
+            allSections.forEach(s => { s.style.display = 'none'; });
+            window.removeEventListener('scroll', updateProgressBar);
+            progressPanel.style.display = 'none';
+            soundBankPanel.style.display = 'none';
+        }
+
+        function showSection(id) {
+            if (currentSection) resetIframes(currentSection);
+            mainMenuContent.style.display = 'none';
+            allSections.forEach(s => { s.style.display = 'none'; });
+            currentSection = document.getElementById(id);
+            if(currentSection) {
+                currentSection.style.display = 'block';
+                window.addEventListener('scroll', updateProgressBar);
+                progressPanel.style.display = 'block';
+                soundBankPanel.style.display = 'none';
+                updateProgressBar();
+            }
+        }
+
+        function toggleSoundBank() { soundBankPanel.style.display = soundBankPanel.style.display === 'block' ? 'none' : 'block'; }
+        function toggleQuiz(button, contentId) { button.classList.toggle('active'); document.getElementById(contentId).classList.toggle('active'); setTimeout(updateProgressBar, 500); }
+        function goToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        function goToBottom() { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+        
+        function updateProgressBar() {
+            pageNav.style.display = (window.scrollY > 200) ? "flex" : "none";
+            if (!currentSection) { progressPanel.style.display = 'none'; return; }
+            progressPanel.style.display = 'block';
+            const progressBar = document.getElementById('progress-bar');
+            const progressLabel = document.getElementById('progress-label');
+            const sectionTop = currentSection.offsetTop;
+            const sectionHeight = currentSection.scrollHeight;
+            const viewportHeight = window.innerHeight;
+            const scrollPos = window.scrollY;
+            let percentage = 0;
+            if (scrollPos >= sectionTop) {
+                const distance = scrollPos + viewportHeight - sectionTop;
+                let total = sectionHeight;
+                if (total < viewportHeight) total = viewportHeight;
+                percentage = (distance / total) * 100;
+            }
+            percentage = Math.max(0, Math.min(percentage, 100));
+            progressBar.style.width = percentage + '%';
+            progressLabel.textContent = `Section ${Math.round(percentage)}% Explored`;
+        }
+        window.addEventListener('scroll', updateProgressBar);
+
+        function getShuffledQuestions(type, num) { return quizPool[type].sort(() => 0.5 - Math.random()).slice(0, num); }
+        
+        function generateQuiz(type) {
+            const container = document.getElementById(`quiz-${type}`); if (!container) return;
+            const questions = getShuffledQuestions(type, 5); let html = '';
+            questions.forEach((q, i) => {
+                let qHtml = `<div class="quiz-question bg-gray-50 p-4 rounded-lg border" data-a="${q.a}"><p class="font-semibold text-gray-800 mb-3"><span class="inline-flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-800 rounded-full text-sm font-bold mr-3">${i + 1}</span>`;
+                if (q.type === 'fill') qHtml += `${q.q.replace(/_+/g, '<input type="text" class="input-modern inline-block w-40 mx-1">')}</p>`;
+                else if (q.type === 'order') qHtml += `Put the words in order: <em class="text-blue-600">${q.q}</em></p><input type="text" class="input-modern w-full mt-2" placeholder="Write the correct sentence...">`;
+                else { qHtml += `${q.q}</p><div class="options mt-3 space-y-2">`; const opts = q.type === 'tf' ? ['T', 'F'] : q.o; opts.forEach(o => { const lbl = q.type === 'tf' ? (o === 'T' ? 'True' : 'False') : o; qHtml += `<label class="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-50 cursor-pointer"><input type="radio" name="q${type}${i}" value="${o}" class="mr-3 text-blue-600 focus:ring-blue-500"><span>${lbl}</span></label>`; }); qHtml += `</div>`; }
+                qHtml += '<div class="feedback mt-3"></div></div>'; html += qHtml;
+            });
+            container.innerHTML = html;
+        }
+        function checkQuiz(type) {
+            document.querySelectorAll(`#quiz-${type} .quiz-question`).forEach(q => {
+                const ans = q.dataset.a; const fb = q.querySelector('.feedback'); let userAns;
+                const input = q.querySelector('.quiz-input'); const selected = q.querySelector('input:checked');
+                if (input) userAns = input.value.trim().replace(/\.$/, ""); else if (selected) userAns = selected.value;
+                if (userAns === undefined || userAns === "") { fb.innerHTML = `<span class="feedback incorrect">⚠️ Please provide an answer.</span>`; return; }
+                if (userAns.toLowerCase() === ans.toLowerCase().replace(/\.$/, "")) { fb.innerHTML = `<span class="feedback correct">✅️ Correct!</span>`; } 
+                else { fb.innerHTML = `<span class="feedback incorrect">❌ Incorrect. The correct answer is: <strong>${ans}</strong></span>`; }
+            });
+        }
+    </script>
+</body>
+</html>
