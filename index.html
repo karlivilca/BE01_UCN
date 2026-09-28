@@ -70,6 +70,7 @@
         .quiz-toggle {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;
+            padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
         }
         .quiz-toggle:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); }
         .quiz-toggle.active { border-radius: 8px 8px 0 0; }
@@ -78,18 +79,14 @@
             background: white; border-radius: 0 0 8px 8px; border: 1px solid #e2e8f0; border-top: none;
             max-height: 0; opacity: 0; overflow: hidden; transition: all 0.5s ease;
         }
-        .quiz-content.active { max-height: 2000px; opacity: 1; padding: 1.5rem; }
+        .quiz-content.active { max-height: 3000px; opacity: 1; padding: 1.5rem; }
 
         .feedback {
             font-weight: 600; padding: 8px 12px; border-radius: 6px; margin-top: 8px;
             display: inline-flex; align-items: center; gap: 8px;
         }
-        .feedback.correct {
-            color: var(--correct-color);
-        }
-        .feedback.incorrect {
-            color: var(--incorrect-color);
-        }
+        .feedback.correct { color: var(--correct-color); }
+        .feedback.incorrect { color: var(--incorrect-color); }
         
         .email-sample { background: #f8fafc; border-left: 4px solid var(--secondary-color); border-radius: 8px; }
         .objectives-box { background: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 8px; }
@@ -102,21 +99,33 @@
         .input-modern:focus { outline: none; border-color: var(--secondary-color); }
 
         #floating-progress-panel { position: fixed; bottom: 20px; left: 20px; z-index: 1000; display: none; background-color: var(--primary-color); color: var(--white-color); padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); width: 220px; }
+        #floating-progress-panel .progress-label { font-size: 0.8rem; margin-bottom: 4px; }
+        #floating-progress-panel .progress-bar-container { width: 100%; height: 8px; background-color: rgba(255,255,255,0.3); border-radius: 4px; overflow: hidden; }
+        #floating-progress-panel .progress-bar-fill { width: 0%; height: 100%; background-color: var(--secondary-color); transition: width 0.2s linear; }
         .page-nav-buttons { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: none; flex-direction: column; gap: 10px; }
         .page-nav-buttons button { width: 50px; height: 50px; border-radius: 50%; background-color: var(--primary-color); color: var(--white-color); border: none; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; }
         .page-nav-buttons button:hover { background-color: var(--secondary-color); transform: scale(1.1); }
-        
-        #floating-sound-bank {
-            position: fixed; bottom: 80px; right: 20px; z-index: 1000;
-            display: none;
-            background-color: transparent;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-            border-radius: 8px;
+
+        /* Vocabulary audio cards */
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-top: 12px; }
+        .vocab-card {
+            background: #f0f9ff; border: 2px solid #bfdbfe; border-radius: 10px;
+            padding: 10px 12px; cursor: pointer; transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 8px; user-select: none;
         }
-        #floating-sound-bank iframe { border-radius: 8px; }
+        .vocab-card:hover { background: var(--secondary-color); color: white; border-color: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(77,153,173,0.3); }
+        .vocab-card:active { transform: scale(0.97); }
+        .vocab-card .word-text { font-weight: 600; font-size: 0.9em; }
+        .vocab-card .speaker-icon { color: var(--primary-color); font-size: 0.9rem; flex-shrink: 0; }
+        .vocab-card:hover .speaker-icon { color: white; }
+        .vocab-card.playing { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .vocab-card.playing .speaker-icon { color: white; }
+        .vocab-section-title { font-weight: 700; color: var(--primary-color); margin: 16px 0 6px; font-size: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; }
 
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+        @keyframes pulse-speaker { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .playing .speaker-icon { animation: pulse-speaker 0.6s ease infinite; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -170,19 +179,46 @@
                 <button class="btn-primary mb-6" onclick="showMenu()"><i class="fas fa-arrow-left mr-2"></i>Back to Menu</button>
                 <h2 class="text-3xl font-bold text-gray-800 mb-6">1. Vocabulary Presentation</h2>
                 <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Business people meeting" class="w-full h-64 object-cover rounded-lg shadow-md mb-8">
+                
+                <p class="text-gray-600 mb-4 flex items-center gap-2"><i class="fas fa-volume-up text-blue-500"></i> <em>Click any word to hear its pronunciation.</em></p>
+
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <h3 class="font-bold text-lg mb-2">Greetings & Sign-offs</h3>
-                        <p><strong>Greetings:</strong></p><ul><li>Dear Mr. Smith (for men)</li><li>Dear Ms. Jones (for women)</li><li>Dear Sir/Madam</li><li>Hello (informal)</li></ul>
-                        <p class="mt-4"><strong>Sign-offs:</strong></p><ul><li>Best regards</li><li>Sincerely</li><li>Thank you</li><li>Kind regards</li></ul>
+                        <div class="vocab-section-title">Greetings</div>
+                        <div class="vocab-grid">
+                            <div class="vocab-card" onclick="speakWord('Dear Mr. Smith', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Dear Mr. Smith</span></div>
+                            <div class="vocab-card" onclick="speakWord('Dear Ms. Jones', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Dear Ms. Jones</span></div>
+                            <div class="vocab-card" onclick="speakWord('Dear Sir or Madam', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Dear Sir or Madam</span></div>
+                            <div class="vocab-card" onclick="speakWord('Hello', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Hello (informal)</span></div>
+                        </div>
+                        <div class="vocab-section-title">Sign-offs</div>
+                        <div class="vocab-grid">
+                            <div class="vocab-card" onclick="speakWord('Best regards', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Best regards</span></div>
+                            <div class="vocab-card" onclick="speakWord('Sincerely', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Sincerely</span></div>
+                            <div class="vocab-card" onclick="speakWord('Thank you', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Thank you</span></div>
+                            <div class="vocab-card" onclick="speakWord('Kind regards', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Kind regards</span></div>
+                        </div>
                     </div>
                     <div>
-                        <h3 class="font-bold text-lg mb-2">Email Parts & Introductions</h3>
-                        <p><strong>Email Parts:</strong></p><ul><li>Subject line</li><li>Body</li><li>Greeting</li><li>Sign-off</li><li>Signature</li></ul>
-                        <p class="mt-4"><strong>Introduction Words:</strong></p><ul><li>My name is...</li><li>I am...</li><li>I work at/for...</li><li>Nice to meet you</li><li>Please</li></ul>
+                        <div class="vocab-section-title">Email Parts</div>
+                        <div class="vocab-grid">
+                            <div class="vocab-card" onclick="speakWord('Subject line', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Subject line</span></div>
+                            <div class="vocab-card" onclick="speakWord('Body', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Body</span></div>
+                            <div class="vocab-card" onclick="speakWord('Greeting', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Greeting</span></div>
+                            <div class="vocab-card" onclick="speakWord('Sign off', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Sign-off</span></div>
+                            <div class="vocab-card" onclick="speakWord('Signature', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Signature</span></div>
+                        </div>
+                        <div class="vocab-section-title">Introduction Words</div>
+                        <div class="vocab-grid">
+                            <div class="vocab-card" onclick="speakWord('My name is', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">My name is...</span></div>
+                            <div class="vocab-card" onclick="speakWord('I am', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">I am...</span></div>
+                            <div class="vocab-card" onclick="speakWord('I work at or for', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">I work at/for...</span></div>
+                            <div class="vocab-card" onclick="speakWord('Nice to meet you', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Nice to meet you</span></div>
+                            <div class="vocab-card" onclick="speakWord('Please', this)"><i class="fas fa-volume-up speaker-icon"></i><span class="word-text">Please</span></div>
+                        </div>
                     </div>
                 </div>
-                <div class="mt-6"><button onclick="toggleSoundBank()" class="btn-primary"><i class="fas fa-volume-high mr-2"></i>Toggle Audio Bank</button></div>
+
                 <div class="quiz-toggle mt-6" onclick="toggleQuiz(this, 'vocab-quiz-content')"><h3 class="text-xl font-bold"><i class="fas fa-brain mr-3"></i>Vocabulary Exercises</h3><i class="fas fa-chevron-down"></i></div>
                 <div class="quiz-content" id="vocab-quiz-content"><div id="quiz-vocab" class="space-y-4"></div><div class="mt-6"><button onclick="checkQuiz('vocab')" class="btn-primary">Check Answers</button><button onclick="generateQuiz('vocab')" class="btn-secondary ml-2">Try Again</button></div></div>
             </section>
@@ -231,7 +267,6 @@
                 <h2 class="text-3xl font-bold text-gray-800 mb-6">4. Practical Task: Writing</h2>
                 <img src="https://images.pexels.com/photos/1181472/pexels-photo-1181472.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Person writing an email on a laptop" class="w-full h-64 object-cover rounded-lg shadow-md mb-8">
                 <div class="grid md:grid-cols-2 gap-8">
-                    <!-- Left Column: Writing Area -->
                     <div class="bg-gray-50 p-6 rounded-lg border">
                         <h3 class="text-xl font-bold text-gray-800 mb-4">Email Template</h3>
                         <p class="text-sm text-gray-600 mb-4"><strong>Situation:</strong> You are starting a new job at TechCorp as a Sales Assistant. Write a 3-sentence email to introduce yourself to your new colleague, Anna Peterson.</p>
@@ -242,7 +277,6 @@ Sentence 2 (Something about starting work):
 Sentence 3 (Polite request or offer):"></textarea></div>
                         </div>
                     </div>
-                    <!-- Right Column: Checklist -->
                     <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
                         <h3 class="text-xl font-bold text-gray-800 mb-4">Self-Check Questions</h3>
                         <div class="space-y-3">
@@ -260,96 +294,224 @@ Sentence 3 (Polite request or offer):"></textarea></div>
 
     <!-- FLOATING UI ELEMENTS -->
     <div id="floating-progress-panel"><div class="progress-label" id="progress-label">Section Progress</div><div class="progress-bar-container"><div class="progress-bar-fill" id="progress-bar"></div></div></div>
-    <div id="floating-sound-bank"><iframe src="https://archive.org/embed/iwork_202506" width="320" height="60" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe></div>
     <div class="page-nav-buttons" id="page-nav"><button onclick="goToTop()" title="Go to Top"><i class="fas fa-arrow-up"></i></button><button onclick="goToBottom()" title="Go to Bottom"><i class="fas fa-arrow-down"></i></button></div>
 
     <script>
-        const quizPool = { vocab: [ { type: 'match', q: 'Match: Dear Mr. Smith', a: 'How you say hello to a man', o: ["How you say goodbye", "The main text", "How you say hello to a man"]}, { type: 'match', q: 'Match: Subject line', a: 'The title of your email', o: ["The title of your email", "Your name", "The main text"]}, { type: 'match', q: 'Match: Body', a: 'The main text of your email', o: ["How you say goodbye", "The title", "The main text of your email"]}, { type: 'match', q: 'Match: Sign-off', a: 'How you say goodbye in an email', o: ["How you say goodbye in an email", "How you say hello", "Your contact info"]}, { type: 'match', q: 'Match: Best regards', a: 'A polite way to end an email', o: ["How you say hello", "A polite way to end an email", "The title"]}, { type: 'fill', q: 'The _______ line tells people what your email is about.', a: 'subject'}, { type: 'fill', q: '"_______ Ms. Brown" is a formal greeting for a woman.', a: 'Dear'}, { type: 'fill', q: '"_______ regards" is a common way to end a business email.', a: 'Best'}, { type: 'fill', q: 'The _______ is the main part of your email with your message.', a: 'body'}, { type: 'fill', q: 'Your _______ includes your name at the end of the email.', a: 'signature'}, { type: 'choice', q: 'Formal or Informal?: Dear Sir/Madam', a: 'F', o: ['F', 'I']}, { type: 'choice', q: 'Formal or Informal?: Hi there', a: 'I', o: ['F', 'I']}, { type: 'choice', q: 'Formal or Informal?: Dear Ms. Wilson', a: 'F', o: ['F', 'I']}, { type: 'choice', q: 'Formal or Informal?: Hey', a: 'I', o: ['F', 'I']}, { type: 'choice', q: 'Formal or Informal?: Dear Mr. Johnson', a: 'F', o: ['F', 'I']} ], reading: [ { type: 'tf', q: 'John Miller is writing to Ms. Rodriguez.', a: 'T'}, { type: 'tf', q: 'John works in the Sales department.', a: 'F'}, { type: 'tf', q: 'John started work on Tuesday.', a: 'F'}, { type: 'tf', q: 'John is excited about his new job.', a: 'T'}, { type: 'tf', q: 'The email ends with "Sincerely".', a: 'F'}, { type: 'choice', q: "What is John's job title?", a: 'Marketing Assistant', o:['Sales Assistant', 'Marketing Assistant', 'Director']}, { type: 'choice', q: 'What company does John work for?', a: 'ABC Company', o:['TechCorp', 'ABC Company', 'Microsoft']}, { type: 'choice', q: 'When did John start work?', a: 'Monday', o:['Monday', 'Tuesday', 'Friday']}, { type: 'choice', q: 'What is the subject line of the email?', a: 'Introduction - New Team Member', o: ['Hello', 'New Job', 'Introduction - New Team Member']}, { type: 'choice', q: 'How does John end his email?', a: 'Best regards,', o: ['Sincerely,', 'Thanks,', 'Best regards,']}, { type: 'choice', q: 'What is the greeting in the email?', a: 'Dear Ms. Rodriguez,', o: ['Hi Ms. Rodriguez,', 'Dear Ms. Rodriguez,', 'Hello,']}, { type: 'choice', q: "What is John's phone number?", a: '(555) 123-4567', o: ['(555) 987-6543', '(555) 123-4567', '(555) 444-5555']} ], grammar: [ { type: 'choice', q: 'My name (is/are) Maria Santos.', a: 'is', o: ['is', 'are']}, { type: 'choice', q: 'I (work/works) at Dell Company.', a: 'work', o: ['work', 'works']}, { type: 'choice', q: 'I (am/is) the new assistant.', a: 'am', o: ['am', 'is']}, { type: 'choice', q: 'This (is/are) my first day.', a: 'is', o: ['is', 'are']}, { type: 'choice', q: 'Please (let/lets) me know if you need help.', a: 'let', o: ['let', 'lets']}, { type: 'order', q: 'Miller / name / John / My / is', a: 'My name is John Miller.'}, { type: 'order', q: 'at / work / I / IBM', a: 'I work at IBM.'}, { type: 'order', q: 'am / I / excited / very', a: 'I am very excited.'}, { type: 'order', q: 'please / know / let / me', a: 'Please let me know.'}, { type: 'order', q: 'new / the / am / I / manager', a: 'I am the new manager.'}, { type: 'fill', q: 'I _____ Lisa Chen.', a: 'am'}, { type: 'fill', q: 'This _____ my email address.', a: 'is'}, { type: 'fill', q: 'We _____ happy to meet you.', a: 'are'}, { type: 'fill', q: 'You _____ the new director.', a: 'are'}, { type: 'fill', q: 'My phone number _____ 555-0123.', a: 'is'}, { type: 'order', q: 'I / work / Google', a: 'I work at Google.' }, { type: 'order', q: 'My name / David / Kim', a: 'My name is David Kim.' }, { type: 'order', q: 'I / excited / join / team', a: 'I am excited to join the team.' }, { type: 'order', q: 'Please / contact / me', a: 'Please contact me.' }, { type: 'order', q: 'This / my / first / email', a: 'This is my first email.' } ] };
+        // ── Quiz Data ──────────────────────────────────────────────────────────
+        const quizPool = {
+            vocab: [
+                { type: 'match', q: 'Match: Dear Mr. Smith', a: 'How you say hello to a man', o: ["How you say goodbye", "The main text", "How you say hello to a man"]},
+                { type: 'match', q: 'Match: Subject line', a: 'The title of your email', o: ["The title of your email", "Your name", "The main text"]},
+                { type: 'match', q: 'Match: Body', a: 'The main text of your email', o: ["How you say goodbye", "The title", "The main text of your email"]},
+                { type: 'match', q: 'Match: Sign-off', a: 'How you say goodbye in an email', o: ["How you say goodbye in an email", "How you say hello", "Your contact info"]},
+                { type: 'match', q: 'Match: Best regards', a: 'A polite way to end an email', o: ["How you say hello", "A polite way to end an email", "The title"]},
+                { type: 'fill', q: 'The _______ line tells people what your email is about.', a: 'subject'},
+                { type: 'fill', q: '"_______ Ms. Brown" is a formal greeting for a woman.', a: 'Dear'},
+                { type: 'fill', q: '"_______ regards" is a common way to end a business email.', a: 'Best'},
+                { type: 'fill', q: 'The _______ is the main part of your email with your message.', a: 'body'},
+                { type: 'fill', q: 'Your _______ includes your name at the end of the email.', a: 'signature'},
+                { type: 'choice', q: 'Formal or Informal?: Dear Sir/Madam', a: 'F', o: ['F', 'I']},
+                { type: 'choice', q: 'Formal or Informal?: Hi there', a: 'I', o: ['F', 'I']},
+                { type: 'choice', q: 'Formal or Informal?: Dear Ms. Wilson', a: 'F', o: ['F', 'I']},
+                { type: 'choice', q: 'Formal or Informal?: Hey', a: 'I', o: ['F', 'I']},
+                { type: 'choice', q: 'Formal or Informal?: Dear Mr. Johnson', a: 'F', o: ['F', 'I']}
+            ],
+            reading: [
+                { type: 'tf', q: 'John Miller is writing to Ms. Rodriguez.', a: 'T'},
+                { type: 'tf', q: 'John works in the Sales department.', a: 'F'},
+                { type: 'tf', q: 'John started work on Tuesday.', a: 'F'},
+                { type: 'tf', q: 'John is excited about his new job.', a: 'T'},
+                { type: 'tf', q: 'The email ends with "Sincerely".', a: 'F'},
+                { type: 'choice', q: "What is John's job title?", a: 'Marketing Assistant', o:['Sales Assistant', 'Marketing Assistant', 'Director']},
+                { type: 'choice', q: 'What company does John work for?', a: 'ABC Company', o:['TechCorp', 'ABC Company', 'Microsoft']},
+                { type: 'choice', q: 'When did John start work?', a: 'Monday', o:['Monday', 'Tuesday', 'Friday']},
+                { type: 'choice', q: 'What is the subject line of the email?', a: 'Introduction - New Team Member', o: ['Hello', 'New Job', 'Introduction - New Team Member']},
+                { type: 'choice', q: 'How does John end his email?', a: 'Best regards,', o: ['Sincerely,', 'Thanks,', 'Best regards,']},
+                { type: 'choice', q: 'What is the greeting in the email?', a: 'Dear Ms. Rodriguez,', o: ['Hi Ms. Rodriguez,', 'Dear Ms. Rodriguez,', 'Hello,']},
+                { type: 'choice', q: "What is John's phone number?", a: '(555) 123-4567', o: ['(555) 987-6543', '(555) 123-4567', '(555) 444-5555']}
+            ],
+            grammar: [
+                { type: 'choice', q: 'My name (is/are) Maria Santos.', a: 'is', o: ['is', 'are']},
+                { type: 'choice', q: 'I (work/works) at Dell Company.', a: 'work', o: ['work', 'works']},
+                { type: 'choice', q: 'I (am/is) the new assistant.', a: 'am', o: ['am', 'is']},
+                { type: 'choice', q: 'This (is/are) my first day.', a: 'is', o: ['is', 'are']},
+                { type: 'choice', q: 'Please (let/lets) me know if you need help.', a: 'let', o: ['let', 'lets']},
+                { type: 'order', q: 'Miller / name / John / My / is', a: 'My name is John Miller.'},
+                { type: 'order', q: 'at / work / I / IBM', a: 'I work at IBM.'},
+                { type: 'order', q: 'am / I / excited / very', a: 'I am very excited.'},
+                { type: 'order', q: 'please / know / let / me', a: 'Please let me know.'},
+                { type: 'order', q: 'new / the / am / I / manager', a: 'I am the new manager.'},
+                { type: 'fill', q: 'I _____ Lisa Chen.', a: 'am'},
+                { type: 'fill', q: 'This _____ my email address.', a: 'is'},
+                { type: 'fill', q: 'We _____ happy to meet you.', a: 'are'},
+                { type: 'fill', q: 'You _____ the new director.', a: 'are'},
+                { type: 'fill', q: 'My phone number _____ 555-0123.', a: 'is'}
+            ]
+        };
+
+        // ── Navigation ─────────────────────────────────────────────────────────
         const mainMenuContent = document.getElementById('main-menu-content');
         const allSections = document.querySelectorAll('.content-section');
         const pageNav = document.getElementById('page-nav');
         const progressPanel = document.getElementById('floating-progress-panel');
-        const soundBankPanel = document.getElementById('floating-sound-bank');
         let currentSection = null;
 
-        document.addEventListener('DOMContentLoaded', () => { generateQuiz('vocab'); generateQuiz('reading'); generateQuiz('grammar'); });
-        
-        function resetIframes(sectionEl) { if (sectionEl) sectionEl.querySelectorAll('iframe').forEach(iframe => { const src = iframe.src; iframe.src = null; iframe.src = src; }); }
-        
+        document.addEventListener('DOMContentLoaded', () => {
+            generateQuiz('vocab');
+            generateQuiz('reading');
+            generateQuiz('grammar');
+        });
+
         function showMenu() {
-            if (currentSection) resetIframes(currentSection);
             currentSection = null;
             mainMenuContent.style.display = 'block';
             allSections.forEach(s => { s.style.display = 'none'; });
-            window.removeEventListener('scroll', updateProgressBar);
             progressPanel.style.display = 'none';
-            soundBankPanel.style.display = 'none';
+            pageNav.style.display = 'none';
         }
 
         function showSection(id) {
-            if (currentSection) resetIframes(currentSection);
             mainMenuContent.style.display = 'none';
             allSections.forEach(s => { s.style.display = 'none'; });
             currentSection = document.getElementById(id);
-            if(currentSection) {
+            if (currentSection) {
                 currentSection.style.display = 'block';
-                window.addEventListener('scroll', updateProgressBar);
-                progressPanel.style.display = 'block';
-                soundBankPanel.style.display = 'none';
+                window.scrollTo(0, 0);
                 updateProgressBar();
             }
         }
 
-        function toggleSoundBank() { soundBankPanel.style.display = soundBankPanel.style.display === 'block' ? 'none' : 'block'; }
-        function toggleQuiz(button, contentId) { button.classList.toggle('active'); document.getElementById(contentId).classList.toggle('active'); setTimeout(updateProgressBar, 500); }
+        function toggleQuiz(button, contentId) {
+            button.classList.toggle('active');
+            document.getElementById(contentId).classList.toggle('active');
+            setTimeout(updateProgressBar, 500);
+        }
         function goToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         function goToBottom() { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
-        
+
         function updateProgressBar() {
             pageNav.style.display = (window.scrollY > 200) ? "flex" : "none";
             if (!currentSection) { progressPanel.style.display = 'none'; return; }
             progressPanel.style.display = 'block';
-            const progressBar = document.getElementById('progress-bar');
-            const progressLabel = document.getElementById('progress-label');
             const sectionTop = currentSection.offsetTop;
             const sectionHeight = currentSection.scrollHeight;
             const viewportHeight = window.innerHeight;
             const scrollPos = window.scrollY;
-            let percentage = 0;
-            if (scrollPos >= sectionTop) {
-                const distance = scrollPos + viewportHeight - sectionTop;
-                let total = sectionHeight;
-                if (total < viewportHeight) total = viewportHeight;
-                percentage = (distance / total) * 100;
-            }
+            const scrollable = sectionHeight - viewportHeight;
+            let percentage = scrollable <= 0 ? 100 : ((scrollPos - sectionTop) / scrollable) * 100;
             percentage = Math.max(0, Math.min(percentage, 100));
-            progressBar.style.width = percentage + '%';
-            progressLabel.textContent = `Section ${Math.round(percentage)}% Explored`;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-label').textContent = `Section ${Math.round(percentage)}% Explored`;
         }
         window.addEventListener('scroll', updateProgressBar);
 
-        function getShuffledQuestions(type, num) { return quizPool[type].sort(() => 0.5 - Math.random()).slice(0, num); }
-        
+        // ── TTS Audio ──────────────────────────────────────────────────────────
+        // Preferred voice priority list (neural/natural voices first)
+        const VOICE_PRIORITY = [
+            'Google US English', 'Google UK English Female', 'Google UK English Male',
+            'Microsoft Aria Online (Natural)', 'Microsoft Jenny Online (Natural)',
+            'Microsoft Guy Online (Natural)', 'Microsoft Libby Online (Natural)',
+            'Samantha', 'Karen', 'Daniel'
+        ];
+        let _selectedVoice = null;
+
+        function getBestVoice() {
+            if (_selectedVoice) return _selectedVoice;
+            const voices = window.speechSynthesis.getVoices();
+            for (const name of VOICE_PRIORITY) {
+                const v = voices.find(v => v.name === name);
+                if (v) { _selectedVoice = v; return v; }
+            }
+            // Fallback: first en-US voice
+            _selectedVoice = voices.find(v => v.lang === 'en-US') || voices[0] || null;
+            return _selectedVoice;
+        }
+
+        // Load voices (Chrome loads them async)
+        if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = () => { _selectedVoice = null; getBestVoice(); };
+        }
+
+        function speakWord(word, cardEl) {
+            if (!window.speechSynthesis) { alert('Your browser does not support text-to-speech.'); return; }
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(word);
+            utter.lang = 'en-US';
+            utter.rate = 0.85;
+            utter.pitch = 1.0;
+            const voice = getBestVoice();
+            if (voice) utter.voice = voice;
+            // Highlight the clicked card
+            document.querySelectorAll('.vocab-card').forEach(c => c.classList.remove('playing'));
+            if (cardEl) {
+                cardEl.classList.add('playing');
+                utter.onend = () => cardEl.classList.remove('playing');
+                utter.onerror = () => cardEl.classList.remove('playing');
+            }
+            window.speechSynthesis.speak(utter);
+        }
+
+        // ── Quiz Generation ────────────────────────────────────────────────────
+        function getShuffledQuestions(type, num) {
+            return [...quizPool[type]].sort(() => 0.5 - Math.random()).slice(0, num);
+        }
+
         function generateQuiz(type) {
-            const container = document.getElementById(`quiz-${type}`); if (!container) return;
-            const questions = getShuffledQuestions(type, 5); let html = '';
+            const container = document.getElementById(`quiz-${type}`);
+            if (!container) return;
+            const questions = getShuffledQuestions(type, 5);
+            let html = '';
             questions.forEach((q, i) => {
-                let qHtml = `<div class="quiz-question bg-gray-50 p-4 rounded-lg border" data-a="${q.a}"><p class="font-semibold text-gray-800 mb-3"><span class="inline-flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-800 rounded-full text-sm font-bold mr-3">${i + 1}</span>`;
-                if (q.type === 'fill') qHtml += `${q.q.replace(/_+/g, '<input type="text" class="input-modern inline-block w-40 mx-1">')}</p>`;
-                else if (q.type === 'order') qHtml += `Put the words in order: <em class="text-blue-600">${q.q}</em></p><input type="text" class="input-modern w-full mt-2" placeholder="Write the correct sentence...">`;
-                else { qHtml += `${q.q}</p><div class="options mt-3 space-y-2">`; const opts = q.type === 'tf' ? ['T', 'F'] : q.o; opts.forEach(o => { const lbl = q.type === 'tf' ? (o === 'T' ? 'True' : 'False') : o; qHtml += `<label class="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-50 cursor-pointer"><input type="radio" name="q${type}${i}" value="${o}" class="mr-3 text-blue-600 focus:ring-blue-500"><span>${lbl}</span></label>`; }); qHtml += `</div>`; }
-                qHtml += '<div class="feedback mt-3"></div></div>'; html += qHtml;
+                let qHtml = `<div class="quiz-question bg-gray-50 p-4 rounded-lg border" data-type="${q.type}" data-a="${encodeURIComponent(q.a)}"><p class="font-semibold text-gray-800 mb-3"><span class="inline-flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-800 rounded-full text-sm font-bold mr-3">${i + 1}</span>`;
+
+                if (q.type === 'fill') {
+                    qHtml += `${q.q.replace(/_+/g, '<input type="text" class="input-modern inline-block w-32 mx-1 quiz-fill-input">')}</p>`;
+                } else if (q.type === 'order') {
+                    qHtml += `Put the words in order: <em class="text-blue-600">${q.q}</em></p><input type="text" class="input-modern w-full mt-2 quiz-order-input" placeholder="Write the correct sentence...">`;
+                } else {
+                    qHtml += `${q.q}</p><div class="options mt-3 space-y-2">`;
+                    const opts = q.type === 'tf' ? ['T', 'F'] : q.o;
+                    opts.forEach(o => {
+                        const lbl = q.type === 'tf' ? (o === 'T' ? 'True' : 'False') : o;
+                        qHtml += `<label class="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-50 cursor-pointer"><input type="radio" name="q${type}${i}" value="${o}" class="mr-3 text-blue-600 focus:ring-blue-500"><span>${lbl}</span></label>`;
+                    });
+                    qHtml += `</div>`;
+                }
+                qHtml += '<div class="feedback mt-3"></div></div>';
+                html += qHtml;
             });
             container.innerHTML = html;
         }
+
         function checkQuiz(type) {
             document.querySelectorAll(`#quiz-${type} .quiz-question`).forEach(q => {
-                const ans = q.dataset.a; const fb = q.querySelector('.feedback'); let userAns;
-                const input = q.querySelector('.quiz-input'); const selected = q.querySelector('input:checked');
-                if (input) userAns = input.value.trim().replace(/\.$/, ""); else if (selected) userAns = selected.value;
-                if (userAns === undefined || userAns === "") { fb.innerHTML = `<span class="feedback incorrect">⚠️ Please provide an answer.</span>`; return; }
-                if (userAns.toLowerCase() === ans.toLowerCase().replace(/\.$/, "")) { fb.innerHTML = `<span class="feedback correct">✅️ Correct!</span>`; } 
-                else { fb.innerHTML = `<span class="feedback incorrect">❌ Incorrect. The correct answer is: <strong>${ans}</strong></span>`; }
+                const ans = decodeURIComponent(q.dataset.a);
+                const qType = q.dataset.type;
+                const fb = q.querySelector('.feedback');
+                let userAns;
+
+                if (qType === 'fill') {
+                    const inp = q.querySelector('.quiz-fill-input');
+                    userAns = inp ? inp.value.trim() : '';
+                } else if (qType === 'order') {
+                    const inp = q.querySelector('.quiz-order-input');
+                    userAns = inp ? inp.value.trim() : '';
+                } else {
+                    const sel = q.querySelector('input:checked');
+                    userAns = sel ? sel.value : '';
+                }
+
+                if (!userAns) {
+                    fb.innerHTML = `<span class="feedback incorrect">⚠️ Please provide an answer.</span>`;
+                    return;
+                }
+
+                const normalize = s => s.toLowerCase().replace(/\.$/, '').trim();
+                if (normalize(userAns) === normalize(ans)) {
+                    fb.innerHTML = `<span class="feedback correct">✅ Correct!</span>`;
+                } else {
+                    fb.innerHTML = `<span class="feedback incorrect">❌ Incorrect. The correct answer is: <strong>${ans}</strong></span>`;
+                }
             });
         }
     </script>
